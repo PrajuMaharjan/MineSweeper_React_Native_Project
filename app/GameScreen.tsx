@@ -1,15 +1,41 @@
-import { View, Text, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
-import { Pressable } from "react-native";
+import {useMemo} from "react";
+import { View, StyleSheet } from "react-native";
+import Board from "../src/components/Board";
+import {CellData} from "../src/components/Cell";
+
+const BOARD_SIZE=9; //Constant for now -- Will be changed according to difficulty in the future
+
+// Build the voard
+function buildCoveredBoard(size:number):CellData[][]{
+  return Array.from({length:size},(_,row)=>
+    Array.from({length:size},(_,col)=>({
+      row,
+      col,
+      bomb:false,
+      revealed:false,
+      flagged:false,
+      adjBombs:0,
+    }))
+  )
+}
 
 export default function GameScreen() {
-  const router = useRouter();
+  
+  // UseMemo since we are only building the board once per game
+  const board=useMemo(()=>buildCoveredBoard(BOARD_SIZE),[]);
+
+  // Placeholders for now - Game logic will be wired up later
+  const handleReveal=(row:number,col:number)=>{};
+  const handleFlag=(row:number,col:number)=>{};
+
   return (
     <View style={styles.root}>
-      <Text style={styles.label}>GameScreen</Text>
-      <Pressable onPress={() => router.back()} style={styles.back}>
-        <Text style={styles.backText}>← Back</Text>
-      </Pressable>
+      <Board  board={board}
+              onReveal={handleReveal}
+              onFlag={handleFlag}
+              gameOver={false}
+              explodedCell={null}
+      />
     </View>
   );
 }
@@ -20,19 +46,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#0D8584",
     alignItems: "center",
     justifyContent: "center",
-    gap: 24,
-  },
-  label: {
-    color: "#ffffff",
-    fontSize: 24,
-    fontWeight: "700",
-  },
-  back: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  backText: {
-    color: "#ffffff",
-    fontSize: 16,
   },
 });
