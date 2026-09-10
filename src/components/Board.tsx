@@ -13,7 +13,7 @@ type BoardProps={
 export default function Board({board,onReveal,onFlag,gameOver,explodedCell}:BoardProps){
     const size=board.length;
 
-    const boardPixelWidth=size*CELL_SIZE+size*BORDER_WIDTH;
+    const boardPixelWidth=size*CELL_SIZE;
     const screenWidth=Dimensions.get("window").width;
     const needsHorizontalScroll=boardPixelWidth>screenWidth-BOARD_PADDING*2;
 
@@ -23,30 +23,19 @@ export default function Board({board,onReveal,onFlag,gameOver,explodedCell}:Boar
 
     const rows=useMemo(()=>board.map((rowArr,rowIdx)=>(
 
-        <BoardRow key={rowIdx}
-                  rowArr={rowArr}
-                  onReveal={handleReveal}
-                  onFlag={handleFlag}
-                  gameOver={gameOver}
-                  explodedCell={explodedCell}
+        <BoardRow   key={rowIdx}
+                    rowArr={rowArr}
+                    onReveal={handleReveal}
+                    onFlag={handleFlag}
+                    gameOver={gameOver}
+                    explodedCell={explodedCell}
         />
     )),
     [board,handleReveal,handleFlag,gameOver,explodedCell]);
 
     return(
         <View style={styles.outerBorder}>
-            <ScrollView horizontal={needsHorizontalScroll}
-                        scrollEnabled={needsHorizontalScroll}
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.scrollContent}
-            >
-                <ScrollView scrollEnabled={true}
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={styles.scrollContent}
-                >
-                    <View style={styles.grid}>{rows}</View>
-                </ScrollView>
-            </ScrollView>
+                <View style={styles.grid}>{rows}</View>
         </View>
     );
 }
@@ -63,12 +52,12 @@ const BoardRow=React.memo(function BoardRow({rowArr,onReveal,onFlag,gameOver,exp
     return(
         <View style={styles.row}>
             {rowArr.map((cell)=>(
-                <Cell key={`${cell.row}-${cell.col}`}
-                      cell={cell}
-                      onReveal={onReveal}
-                      onFlag={onFlag}
-                      gameOver={gameOver}
-                      explodedCell={explodedCell}
+                <Cell   key={`${cell.row}-${cell.col}`}
+                        cell={cell}
+                        onReveal={onReveal}
+                        onFlag={onFlag}
+                        gameOver={gameOver}
+                        explodedCell={explodedCell}
                 />
             ))}
         </View>
@@ -87,12 +76,16 @@ const styles=StyleSheet.create({
         borderBottomColor:'#FFFFFF',
         borderRightColor:'#FFFFFF',
         alignSelf:'center',
+        overflow:'hidden'
     },
     scrollContent:{
-        flexGrow:0,
+        flexGrow:1,
+        alignItems:'center',
+        justifyContent:'center',
     },
     grid:{
         flexDirection:'column',
+        alignSelf:'flex-start',
     },
     row:{
         flexDirection:'row',
