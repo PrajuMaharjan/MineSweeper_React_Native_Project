@@ -25,7 +25,10 @@ export default function GameScreen() {
   const board=useMemo(()=>buildCoveredBoard(BOARD_SIZE),[]);
 
   // Placeholders for now - Game logic will be wired up later
-  const handleReveal=(row:number,col:number)=>{};
+  const handleReveal=(row:number,col:number)=>{
+    console.log(`Cell pressed - row: ${row+1}, col: ${col+1}`);
+  };
+
   const handleFlag=(row:number,col:number)=>{};
 
   return (
